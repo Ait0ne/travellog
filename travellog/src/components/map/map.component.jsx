@@ -1,6 +1,6 @@
 import React, {Fragment, createRef} from 'react';
 import './map.styles.css';
-import { Viewer, Scene, Camera, Entity, BillboardGraphics, CustomDataSource, CameraFlyTo} from 'resium';
+import { Viewer, Scene, Camera, Entity, BillboardGraphics, CustomDataSource, CameraFlyTo, Globe} from 'resium';
 import { Math, Color, MapboxStyleImageryProvider,  Cartesian3, Cartesian2, EntityCluster, PinBuilder} from 'cesium';
 import Popup from '../popup/popup.components';
 import { connect } from 'react-redux';
@@ -49,6 +49,7 @@ class Map extends React.Component {
             leftClickMenuPosition: { top: 0, left: 0 },
             rightClickMenuShown: false,
             rightClickMenuPosition: { top: 0, left: 0},
+            isLoading: true
         }
     }
 
@@ -169,6 +170,10 @@ class Map extends React.Component {
         event.preventDefault();
     }
 
+    handlePostSceneRender = (q) => {
+        console.log(q)
+    }
+
     render() {
         const {  rightClickMenuPosition, rightClickMenuShown, leftClickMenuShown, leftClickMenuPosition } = this.state
         const { places_arr, location, newPlaces, isEditing, currentUser} = this.props
@@ -190,9 +195,16 @@ class Map extends React.Component {
                     full
                     geocoder={false}
                     selectionIndicator={false}
+                    
                     >
 
-                    <Scene backgroundColor={Color.WHITESMOKE}  ref = {this.scene}/>   
+                    <Scene 
+                    backgroundColor={Color.WHITESMOKE}  
+                    ref = {this.scene}
+                    onPostRender={this.handlePostSceneRender}
+                    />   
+
+                    <Globe onTileLoadProgress={this.handlePostSceneRender}/>
 
                     <Camera />
                     {

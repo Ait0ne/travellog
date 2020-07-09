@@ -33,7 +33,7 @@ const NavBar = ({toggleSideBar, currentUser, location }) => {
                 {
                     location.pathname.match(/\/\w+\/\w+/)&&!location.pathname.match(/map/)?
                     <Link to={`/map/${location.pathname.split('/')[1]}`}>
-                        <img height={40} src={process.env.PUBLIC_URL+'/globe.png'}></img>
+                        <img alt='globe' height={40} src={process.env.PUBLIC_URL+'/globe.png'}></img>
                     </Link>
                     : 
                     null
@@ -53,7 +53,7 @@ const NavBar = ({toggleSideBar, currentUser, location }) => {
                         onClose={handleMenuClose}
                         anchorEl={anchorEl}
                         >
-                            <Link to={`/map/${currentUser.id}`}>
+                            <Link onClick={handleMenuClose} to={`/map/${currentUser.id}`}>
                                 <MenuItem>Моя Карта</MenuItem>
                             </Link>
                             <MenuItem>Профиль</MenuItem>

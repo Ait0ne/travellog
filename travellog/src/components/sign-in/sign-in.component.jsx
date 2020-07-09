@@ -63,6 +63,7 @@ class  SignIn extends React.Component{
             }
         })
         .catch(err => {
+            console.log(err)
             if (err.code!=="auth/popup-closed-by-user") {
                 this.props.handleAlert('Аккаунт ассоциирован с другим методом аутентификации', 'error')
             }
@@ -77,6 +78,7 @@ class  SignIn extends React.Component{
             }
         })
         .catch(err => {
+            console.log(err)
             if (err.code!=="auth/popup-closed-by-user") {
                 this.props.handleAlert('Аккаунт ассоциирован с другим методом аутентификации', 'error')
             }
