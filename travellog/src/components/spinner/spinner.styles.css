@@ -1,0 +1,21 @@
+.donut {
+    width: 2rem;
+    left:40%;
+    top: 40%;
+    height: 2rem;
+    margin: 2rem;
+    border-radius: 50%;
+    border: 0.3rem solid grey;
+    border-top-color: rgb(185, 184, 184);
+    animation: 1.5s spin infinite linear;
+    position: absolute;
+    z-index:999
+} 
+
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+

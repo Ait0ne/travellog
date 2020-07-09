@@ -1,0 +1,92 @@
+.album-container {
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: fit-content;
+    background-color: rgb(250, 250, 250);
+
+}
+
+.album-container-inner {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 935px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    
+}
+
+.album-image-container {
+    margin: 6.25px 6.25px;
+    background-color: black;
+    position: relative;
+}
+.album-image-container:nth-of-type(3){
+    margin-right:0
+}
+
+.album-image-container:nth-of-type(3n+1){
+    margin-left:0
+}
+.account-and-album-info {
+    width: 100%;
+    max-width:935px;
+    margin-top: 54px;
+    padding: 40px;
+    display: flex;
+    flex-direction:  row;
+    justify-content: flex-start;
+}
+.album-description {
+    width: 60%;
+    margin-left: 50px;
+}
+
+.divider {
+    width: 30%;
+    
+}
+
+.album-image:hover {
+    opacity: 0.8
+}
+
+
+
+.image-actions-buttons {
+    position: absolute;
+    display: none;
+    top: 45%;
+    left: 30%
+}
+
+.image-action-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    z-index: 999;
+    margin-right: 10px;
+}
+.image-action-button:hover {
+    transform: scale(1.1);
+    color: rgba(255,255,255,0.8)
+} 
+
+
+.album-image-container:hover .image-actions-buttons {
+    display: flex !important;
+}
+
+.MuiButton-textSecondary:hover {
+    color: #e6a6bc !important;
+}
+
+.album-no-images-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color:#f50057
+}

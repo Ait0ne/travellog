@@ -1,0 +1,15 @@
+
+.cesium-viewer-bottom {
+  display:none
+}
+
+.cesium-viewer-toolbar {
+  top:60px;
+}
+
+.fallback-container {
+   height: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}

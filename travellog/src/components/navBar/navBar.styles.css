@@ -1,0 +1,40 @@
+.navigation-container {
+    width:100%;
+    height: 54px;
+    position: fixed;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    color: black;
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(250,250,250);
+    border-bottom: 1px solid rgb(219,219,219);
+    font-weight: 700;
+}
+
+.navigation {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 935px;
+    align-items: center;
+}
+
+
+
+.navigation a {
+    justify-self: flex-end;
+}
+
+.side-menu-button {
+    cursor: pointer;
+
+}
+
+.side-menu-button:hover {
+    transform: scale(1.05);
+    color: rgba(0,0,0, 0.6)
+}

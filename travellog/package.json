@@ -1,0 +1,61 @@
+{
+  "name": "travellog",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@craco/craco": "^5.6.4",
+    "@hot-loader/react-dom": "^16.13.0",
+    "@mapbox/mapbox-sdk": "^0.11.0",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.19.2",
+    "bootstrap": "^4.5.0",
+    "cesium": "^1.71.0",
+    "craco-cesium": "^1.2.0",
+    "craco-plugin-react-hot-reload": "^0.1.0",
+    "firebase": "^7.15.5",
+    "react": "^16.13.1",
+    "react-bootstrap": "^1.0.1",
+    "react-bootstrap-typeahead": "^5.1.0",
+    "react-dom": "^16.13.1",
+    "react-draggable": "^4.4.3",
+    "react-dropzone": "^11.0.1",
+    "react-hot-loader": "^4.12.21",
+    "react-lazy-load-image-component": "^1.5.0",
+    "react-mapbox-gl-geocoder": "^1.1.0",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "react-simple-img": "^2.3.9",
+    "react-swipeable": "^5.5.1",
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
+    "resium": "^1.12.0-beta.2"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "trial": "react-scripts start",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

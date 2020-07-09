@@ -1,0 +1,46 @@
+html, body, .root {
+  height: 100%;
+}
+body {
+
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+iframe {
+  height:100% !important;
+}
+
+#root {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  background-color: rgb(250,250,250);
+}
+
+input:focus, button:focus {
+  outline: none !important;
+}
+
+.form-control:focus {
+  border-color: #ced4da !important;
+  box-shadow: none !important;
+}
+
+body a {
+  text-decoration: none;
+  color: black
+}
+body a:hover {
+  text-decoration: none;
+  color: black
+}

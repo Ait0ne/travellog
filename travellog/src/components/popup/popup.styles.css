@@ -1,0 +1,44 @@
+.popup-container {
+    min-width: 194px;
+    min-height:150px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    transition: ease-in;
+    transition-duration: 0.3s;
+}
+
+.popup-content-container {
+    display: flex;
+    width:300px;
+    height: 300px;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+}
+
+.popup-no-album-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:102px;
+    width:194px;
+    padding: 0 15px;
+
+}
+
+.popup-album-container {
+    display: flex;
+    width:300px;
+    height:100%;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.navigate-to-album-button {
+    color: #181818
+}
+
+.navigate-to-album-button:hover {
+    color: rgba(0,0,0,0.6)
+}

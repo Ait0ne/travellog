@@ -1,0 +1,88 @@
+import React, { Fragment, useState } from 'react';
+import MenuIcon from '@material-ui/icons/Menu';
+import {connect} from 'react-redux';
+import { Link, withRouter } from 'react-router-dom';
+import { Menu, MenuItem, Typography } from '@material-ui/core';
+
+import Avatar from '../avatar/avatar.component';
+import { toggleSideBar } from '../../redux/dialogs/dialogs.actions';
+import { auth } from '../../firebase/firebase.utils';
+
+import './navBar.styles.css';
+
+
+const NavBar = ({toggleSideBar, currentUser, location }) => {
+    const [menuOpen, setMenuOpen] = useState(false)
+    const [anchorEl, setAnchorEl] = useState(null)
+
+    
+    const handleMenuClose = () => {
+        setAnchorEl(null)
+        setMenuOpen(false)
+    }
+
+    const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget)
+        setMenuOpen(true)
+    }
+
+    return (
+        <div className='navigation-container'>
+
+            <div className='navigation'>
+                {
+                    location.pathname.match(/\/\w+\/\w+/)&&!location.pathname.match(/map/)?
+                    <Link to={`/map/${location.pathname.split('/')[1]}`}>
+                        <img height={40} src={process.env.PUBLIC_URL+'/globe.png'}></img>
+                    </Link>
+                    : 
+                    null
+                }
+                {
+                    location.pathname.match(/map\//)?
+                    <span className='side-menu-button' onClick={toggleSideBar}><MenuIcon /></span>
+                    :null
+                }
+                
+                {
+                    currentUser ?
+                    <Fragment>
+                        <Avatar imageUrl={currentUser.avatar}  onClick={handleMenuOpen} width={45}/>
+                        <Menu
+                        open={menuOpen}
+                        onClose={handleMenuClose}
+                        anchorEl={anchorEl}
+                        >
+                            <Link to={`/map/${currentUser.id}`}>
+                                <MenuItem>Моя Карта</MenuItem>
+                            </Link>
+                            <MenuItem>Профиль</MenuItem>
+                            <MenuItem onClick={() => {
+                                auth.signOut()
+                                handleMenuClose()
+                                }}>Выйти</MenuItem>
+                        </Menu>
+                    </Fragment>
+                    :
+                    <Link to='/auth'>
+                        <Typography variant='h6' color='secondary'>Войти</Typography>
+                    </Link>
+                }
+
+                
+            </div>
+        </div>
+
+    )
+}
+
+const mapStateToProps = state => ({
+    currentUser: state.user.currentUser
+})
+
+const mapDispatchToProps = dispatch => ({
+    toggleSideBar: () => dispatch(toggleSideBar())
+})
+
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NavBar));
