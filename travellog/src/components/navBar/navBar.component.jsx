@@ -71,7 +71,7 @@ const NavBar = ({toggleSideBar, currentUser, location }) => {
                     </Fragment>
                     :
                     <Link to='/auth'>
-                        <Typography variant='h6' color='secondary'>Войти</Typography>
+                        <Typography style={{marginRight: '10px'}} variant='h6' >Войти</Typography>
                     </Link>
                 }
 

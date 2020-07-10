@@ -5,7 +5,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import SideMenu from '../sideMenu/side-menu.component';
 import { styled} from '@material-ui/core/styles'
 import { connect } from 'react-redux';
-
+import { AnimatePresence } from 'framer-motion';
 
 import './addPlaceMenu.styles.css';
 import { toggleEditing, clearNewPlaces } from '../../redux/places/places.actions';
@@ -31,10 +31,13 @@ const AddPlaceMenu = ({isEditing, toggleEditing, clearNewPlaces}) => {
 
     return (
         <Fragment>
-
-                {
-                    isEditing? <SideMenu/> :null
+                <AnimatePresence>
+                {   
+                    isEditing? 
+                        <SideMenu/> 
+                    :null
                 }
+                </AnimatePresence>
                 <CustomFab color="secondary" aria-label="add" onClick={handleClick}>
                     { !isEditing? <AddIcon /> : <CloseIcon/> }
                 </CustomFab>

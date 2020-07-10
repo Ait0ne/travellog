@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { lazy, Suspense } from 'react';
 import {
     Dialog, 
     DialogActions, 
@@ -16,13 +16,17 @@ import Dropzone from 'react-dropzone';
 import CloudUpload from '@material-ui/icons/CloudUpload';
 import axios from 'axios'
 import { addImages } from '../firebase/firebase.utils';
+import {motion} from 'framer-motion';
 
+
+import Fallback from '../components/fallback/falback.component';
 import {API_URL} from '../config';
 import SideBar from '../components/SideBar/sidebar.component';
 import AddPlaceMenu from '../components/addPlaceMenu/addPlaceMenu.component';
-import Map from '../components/map/map.component';
+// import Map from '../components/map/map.component';
 import './homepage.styles.css'
 
+const Map = lazy(() => import('../components/map/map.component'));
 
 const CustomDialogContent = styled(DialogContent)({
     display: 'flex',
@@ -109,9 +113,16 @@ class Homepage extends React.Component{
         const { createAlbumShown, currentUser} = this.props
         const { name, description, files, noNameError, noImagesError, isUploading } = this.state
         return (
-            <Fragment>
+            <motion.div
+            key='homepage'
+            initial={{opacity:0}}
+            animate={{opacity:1, transition: {duration: 1, ease: 'easeInOut'}}}
+            exit={{opacity:0}}
+            >
                 <SideBar />
-                <Map />
+                <Suspense fallback={<Fallback/>}>
+                    <Map />
+                </Suspense>
                 {
                     currentUser&&this.props.match.params.userId===currentUser.id? <AddPlaceMenu /> : null
                 }
@@ -195,7 +206,7 @@ class Homepage extends React.Component{
                         </Button>
                     </DialogActions>
                 </Dialog>
-            </Fragment>
+            </motion.div>
         )
     }
 }

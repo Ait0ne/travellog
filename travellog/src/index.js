@@ -7,14 +7,16 @@ import { Provider } from 'react-redux';
 import {store} from './redux/store';
 import {BrowserRouter} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import {AnimatePresence} from 'framer-motion';
 
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <React.StrictMode>
-        <App />
+        <AnimatePresence exitBeforeEnter>
+          <App />
+        </AnimatePresence>
       </React.StrictMode>
     </BrowserRouter>
   </Provider>,

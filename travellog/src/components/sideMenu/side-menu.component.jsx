@@ -6,6 +6,7 @@ import { AppBar, Typography, IconButton, Toolbar, Popover, Button} from '@materi
 import HelpIcon from '@material-ui/icons/Help'; 
 import { makeStyles } from '@material-ui/core/styles'
 import { addPlace } from '../../firebase/firebase.utils';
+import {motion} from 'framer-motion';
 
 import geocodingService from '../../mapbox/mapbox.utils';
 import { setLocation, toggleEditing, clearNewPlaces } from '../../redux/places/places.actions';
@@ -102,8 +103,13 @@ const SideMenu = ({setLocation, newPlaces, clearNewPlaces, toggleEditing, curren
 
     
     return (
-
-            <div  className='side-menu-container'>
+        
+            <motion.div  className='side-menu-container'
+            key='side-menu'
+            initial={{opacity:0, scaleY:0, transformOrigin:'bottom'}}
+            animate={{opacity:1, scaleY: 1,  transition: {duration:0.2}}}
+            exit={{opacity:0, scaleY:0,  transition: {duration: 0.2}}}
+            >
                 <AppBar position='static' color='secondary'>
                     <Toolbar className={classes.root} variant='dense'>
                         <Typography variant='h6'>
@@ -165,8 +171,7 @@ const SideMenu = ({setLocation, newPlaces, clearNewPlaces, toggleEditing, curren
                         </div>
                     </form>
                 </div>
-            </div>
-
+            </motion.div>            
     )
 }
 

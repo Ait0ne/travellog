@@ -1,6 +1,7 @@
 import React from 'react';
 import Alert from '@material-ui/lab/Alert';
 import { styled } from '@material-ui/core/styles'
+import { motion } from 'framer-motion';
 
 import './auth.css'
 import SignIn from '../components/sign-in/sign-in.component';
@@ -60,18 +61,23 @@ class Auth extends React.Component {
     render() {
         const {x, deviceWidth, alertShown, alertText, alertSeverity} = this.state
         return (
-                
-                <div className='form-container'>
-                    {
-                        alertShown? <CustomAlert severity={alertSeverity} onClose={this.toggleAlert}>{alertText}</CustomAlert>: null
-                    }
-                    <div className='sign-in-sign-up-form'>
-                        <div className='auth-small-device-container' style={{transform: `translateX(${x}%)`}}>
-                            <SignIn handleAlert={this.handleAlert} translate={this.changeSignInSignUp} deviceWidth={deviceWidth}/>
-                            <SignUp handleAlert={this.handleAlert}  translate={this.changeSignInSignUp} deviceWidth={deviceWidth}/>
-                        </div>
+            <motion.div
+            className='form-container'
+            key='auth-page'
+            initial={{opacity:0}}
+            animate={{opacity:1, transition: {duration: 0.8, ease: 'easeInOut'}}}
+            exit={{opacity:0}}
+            >
+                {
+                    alertShown? <CustomAlert severity={alertSeverity} onClose={this.toggleAlert}>{alertText}</CustomAlert>: null
+                }
+                <div className='sign-in-sign-up-form'>
+                    <div className='auth-small-device-container' style={{transform: `translateX(${x}%)`}}>
+                        <SignIn handleAlert={this.handleAlert} translate={this.changeSignInSignUp} deviceWidth={deviceWidth}/>
+                        <SignUp handleAlert={this.handleAlert}  translate={this.changeSignInSignUp} deviceWidth={deviceWidth}/>
                     </div>
                 </div>
+            </motion.div>
         )}
 }
 

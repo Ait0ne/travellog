@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import {connect} from 'react-redux';
-import { CircularProgress, Typography, Button, IconButton } from '@material-ui/core'
+import { Typography, Button, IconButton } from '@material-ui/core'
 import {styled} from '@material-ui/core/styles';
 import { Edit, Delete } from '@material-ui/icons';
 import axios from 'axios';
+import {motion} from 'framer-motion';
 
 import {LazyLoadImage} from 'react-lazy-load-image-component';
 import EditDescriptionDialog from '../components/editDescriptionDialog/editDescriptionDialog.component';
@@ -14,6 +15,7 @@ import {firestore, removeImage} from '../firebase/firebase.utils';
 import { setFullScreenImage, toggleFullscreenImage } from '../redux/images/images.actions';
 import { toggleAddImages, toggleDescriptionEdit } from '../redux/dialogs/dialogs.actions';
 import './album.css';
+import Fallback from '../components/fallback/falback.component';
 
 const CustomButton = styled(Button)({
     height: '30px',
@@ -126,7 +128,13 @@ class Album extends React.Component {
             <Fragment>
                 {
                     !isLoading?
-                    <div className='album-container'>
+                    <motion.div
+                    className='album-container'
+                    key='album-page'
+                    initial={{opacity:0}}
+                    animate={{opacity:1, transition: {duration: 0.8, ease: 'easeInOut'}}}
+                    exit={{opacity:0}}
+                    >
                         <div className='account-and-album-info'>
                             <div className='album-description-row'>
                                 <Avatar width={150} border={true} imageUrl={avatarUrl}/>
@@ -202,8 +210,8 @@ class Album extends React.Component {
                             : null
                         }
 
-                    </div>
-                    : <CircularProgress color='inherit'/>
+                    </motion.div>
+                    : <Fallback />
                 }
                 
             </Fragment>

@@ -1,6 +1,6 @@
 import React, {Fragment, createRef} from 'react';
 import './map.styles.css';
-import { Viewer, Scene, Camera, Entity, BillboardGraphics, CustomDataSource, CameraFlyTo} from 'resium';
+import { Viewer, Scene, Camera, Entity, BillboardGraphics, CustomDataSource, CameraFlyTo, Globe} from 'resium';
 import { Math, Color, MapboxStyleImageryProvider,  Cartesian3, Cartesian2, EntityCluster, PinBuilder} from 'cesium';
 import Popup from '../popup/popup.components';
 import { connect } from 'react-redux';
@@ -11,14 +11,29 @@ import { setCurrentPlaces, setLocation, addNewPlace, removeNewPlace, setSelected
 import { firestore, removePlace } from '../../firebase/firebase.utils';
 
 
-var PUBLIC_TOKEN ='pk.eyJ1IjoiZGVlcGZyaWVkZmlsdGgiLCJhIjoiY2puZTN0dGN4MDdxbDNrbXk4eWNyZTh2ZyJ9.liPCD5Y2L6Fp7JDSIxGviA'
 
+const my_token = 'pk.eyJ1IjoiYWl0MG5lIiwiYSI6ImNrYzRtdjN2dTA5OXkzMG52YWtxa2puMTgifQ.YCNUcdUtUY1v10-i6oSpEw'
 
 const mapbox = new MapboxStyleImageryProvider({
-  styleId: 'light-v10',
-  accessToken: PUBLIC_TOKEN,
-  defaultAlpha: 1
+    styleId: 'light-v10',
+    accessToken: my_token,
+    defaultHue: 1
 })
+
+// const providerViewModels = []
+
+// providerViewModels.push(new ProviderViewModel({
+//     name: 'basic',
+//     iconUrl: `${process.env.PUBLIC_URL}/globe.png`,
+//     tooltip: 'basic',
+//     creationFunction: () => {
+//         return new UrlTemplateImageryProvider({
+//             url: 'https://api.mapbox.com/styles/v1/ait0ne/ckcg6rq3g0tol1il5iezsnjyp/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWl0MG5lIiwiYSI6ImNrYzRtdjN2dTA5OXkzMG52YWtxa2puMTgifQ.YCNUcdUtUY1v10-i6oSpEw',
+//         })
+//     }
+// }))
+
+
 
 const entityCluster = new EntityCluster({
     enabled: true,
@@ -195,7 +210,6 @@ class Map extends React.Component {
                     imageryProvider={ mapbox}
                     baseLayerPicker={false} 
                     skyBox={false} 
-                    homeButton={false}
                     navigationHelpButton={false}
                     timeline={false}
                     animation={false}
@@ -207,14 +221,19 @@ class Map extends React.Component {
                     full
                     geocoder={false}
                     selectionIndicator={false}
-                    
+                    // imageryProviderViewModels={providerViewModels}
                     >
 
                     <Scene 
-                    backgroundColor={Color.WHITESMOKE}  
+                    backgroundColor={Color.WHITE}  
                     ref = {this.scene}
                     onPostRender={this.handlePostSceneRender}
                     />   
+                    <Globe 
+                    baseColor={Color.WHITESMOKE} 
+                    fillHighlightColor={Color.BLACK}
+                    atmosphereBrightnessShift={0.1}
+                    />
                     <Camera />
                     {
                         location? <CameraFlyTo destination={new Cartesian3.fromDegrees(location.longitude, location.latitude, 20000)} onComplete={this.handleFlyToComplete}/> : null

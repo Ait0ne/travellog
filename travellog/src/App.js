@@ -3,8 +3,9 @@ import './App.css';
 import { hot } from 'react-hot-loader/root';
 import {Switch,Route, Redirect, withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
+import { AnimatePresence } from 'framer-motion';
 
-
+import Fallback from './components/fallback/falback.component';
 import { setCurrentUser } from './redux/users/users.actions';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import NavBar from './components/navBar/navBar.component';
@@ -14,8 +15,14 @@ import Album from './pages/album';
 import Auth from './pages/auth'
 import Landing from './pages/landing';
 
-class App extends React.Component {
+// const Homepage = lazy(() => import('./pages/homepage'));
+// const Album = lazy(()=>import('./pages/album'));
 
+class App extends React.Component {
+  state = {
+    isLoading: true
+  } 
+  
   unsubscribeFromAuth = null
 
   componentDidMount() {
@@ -31,6 +38,7 @@ class App extends React.Component {
           });
         }
       setCurrentUser(userAuth);
+      this.setState({isLoading:false})
     });
   }
 
@@ -47,14 +55,20 @@ class App extends React.Component {
           <NavBar/>
           :null
         }
-        <Switch>
-            <Route exact path='/'  component={Landing}/>
-            <Route exact path='/auth' render={() => currentUser ? 
-            (<Redirect to='/'/>) : (<Auth/>)}/>
-            <Route exact path='/map/:userId' component={Homepage}/>
-            <Route path='/:userId/:placeId' component={Album}/>
-            
-        </Switch>
+        {
+          this.state.isLoading? 
+          <Fallback />
+          :
+          <AnimatePresence exitBeforeEnter>
+            <Switch location={location} key={location.pathname}>
+                <Route exact path='/'  component={Landing}/>
+                <Route exact path='/auth' render={() => currentUser ? 
+                (<Redirect to='/'/>) : (<Auth/>)}/>
+                <Route exact path='/map/:userId' component={Homepage}/>
+                <Route exact path='/:userId/:placeId' component={Album}/>
+            </Switch>
+          </AnimatePresence>
+        }
         <FullScreenImage />
       </Fragment>
     )
