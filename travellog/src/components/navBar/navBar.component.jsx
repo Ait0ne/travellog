@@ -33,14 +33,20 @@ const NavBar = ({toggleSideBar, currentUser, location }) => {
                 {
                     location.pathname.match(/\/\w+\/\w+/)&&!location.pathname.match(/map/)?
                     <Link to={`/map/${location.pathname.split('/')[1]}`}>
-                        <img alt='globe' height={40} src={process.env.PUBLIC_URL+'/globe.png'}></img>
+                        <img className='left-margin' alt='globe' height={40} src={process.env.PUBLIC_URL+'/globe.png'}></img>
+                        <span className='app-title'>Travellog</span>
                     </Link>
                     : 
                     null
                 }
                 {
                     location.pathname.match(/map\//)?
-                    <span className='side-menu-button' onClick={toggleSideBar}><MenuIcon /></span>
+                    <span>
+                        <span className='side-menu-button left-margin' onClick={toggleSideBar}><MenuIcon /></span>
+                        <Link to='/'>
+                            <span className='app-title'>Travellog</span>
+                        </Link>
+                    </span>
                     :null
                 }
                 

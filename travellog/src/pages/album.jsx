@@ -29,14 +29,16 @@ class Album extends React.Component {
             images: [],
             place: null,
             isLoading: true,
-            avatarUrl: ''
+            avatarUrl: '',
+            deviceWidth: null
         }
-        this.handleEditDescription = this.handleEditDescription.bind(this)
     }
     unsubscribeFromImages = null
 
     componentDidMount() {
         const {userId, placeId} = this.props.match.params
+        this.setDeviceWidth()
+        window.addEventListener('resize', this.setDeviceWidth)
         this.setState({isLoading: true})
         firestore
         .collection('avatars')
@@ -76,9 +78,13 @@ class Album extends React.Component {
     }
 
     componentWillUnmount() {
-        this.unsubscribeFromImages()
+        this.unsubscribeFromImages();
+        window.removeEventListener('resize', this.setDeviceWidth)
     }
 
+    setDeviceWidth = () => {
+        this.setState({deviceWidth: document.body.scrollWidth})
+    }
 
     handleImageClick = (event,image) => {
         const { toggleFullscreenImage, setFullScreenImage } = this.props
@@ -114,7 +120,7 @@ class Album extends React.Component {
 
 
     render() {
-        const { isLoading, images, place, avatarUrl } = this.state
+        const { isLoading, images, place, avatarUrl, deviceWidth } = this.state
         const { toggleDescriptionEdit, editDescriptionShown, match, currentUser } = this.props
         return (
             <Fragment>
@@ -122,21 +128,23 @@ class Album extends React.Component {
                     !isLoading?
                     <div className='album-container'>
                         <div className='account-and-album-info'>
-                            <Avatar width={150} border={true} imageUrl={avatarUrl}/>
-                            <div className='album-description'>
-                                <Typography variant='h5'>
-                                    {place.name}
-                                    {
-                                        currentUser&& match.params.userId===currentUser.id?
-                                        <IconButton onClick={toggleDescriptionEdit}>
-                                            <Edit color='secondary'/>
-                                        </IconButton>
-                                        :null
-                                    }
-                                </Typography>
-                                <Typography variant='body1'>
-                                    {place.description}
-                                </Typography>
+                            <div className='album-description-row'>
+                                <Avatar width={150} border={true} imageUrl={avatarUrl}/>
+                                <div className='album-description'>
+                                    <Typography variant='h5'>
+                                        {place.name}
+                                        {
+                                            currentUser&& match.params.userId===currentUser.id?
+                                            <IconButton onClick={toggleDescriptionEdit}>
+                                                <Edit color='secondary'/>
+                                            </IconButton>
+                                            :null
+                                        }
+                                    </Typography>
+                                    <Typography variant='body1'>
+                                        {place.description}
+                                    </Typography>
+                                </div>
                             </div>
                             {
                                 currentUser&& match.params.userId===currentUser.id?
@@ -168,7 +176,8 @@ class Album extends React.Component {
                                             </div>
                                             : null
                                         }
-                                        <LazyLoadImage className='album-image' width={300} height={300}   src={`${AWS_URL}${image.mediumImageUrl}`}/>
+                                        {console.log(deviceWidth)}
+                                        <LazyLoadImage className='album-image' width={deviceWidth&&deviceWidth<955? (deviceWidth-45)/3 : 300} height={deviceWidth&&deviceWidth<955? (deviceWidth-45)/3 : 300}  src={`${AWS_URL}${image.mediumImageUrl}`}/>
                                     </div>
                                     )
                                 })

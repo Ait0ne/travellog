@@ -1,6 +1,6 @@
 import React, {Fragment, createRef} from 'react';
 import './map.styles.css';
-import { Viewer, Scene, Camera, Entity, BillboardGraphics, CustomDataSource, CameraFlyTo, Globe} from 'resium';
+import { Viewer, Scene, Camera, Entity, BillboardGraphics, CustomDataSource, CameraFlyTo} from 'resium';
 import { Math, Color, MapboxStyleImageryProvider,  Cartesian3, Cartesian2, EntityCluster, PinBuilder} from 'cesium';
 import Popup from '../popup/popup.components';
 import { connect } from 'react-redux';
@@ -56,6 +56,7 @@ class Map extends React.Component {
     cesium = createRef()
     scene = createRef()
     unsubscribeFromClustering = null;
+    clickTimer = null;
 
     componentDidMount() {
         console.log(this.props)
@@ -85,7 +86,7 @@ class Map extends React.Component {
         })
     }
 
-
+    
 
     componentWillUnmount() {
         this.unsubscribeFromPlaces()
@@ -170,8 +171,19 @@ class Map extends React.Component {
         event.preventDefault();
     }
 
-    handlePostSceneRender = (q) => {
-        console.log(q)
+
+    onMouseDown = (obj, entity) => {
+        const { currentUser, match } = this.props
+        this.clickTimer = setTimeout(() => {
+            return currentUser&&match.params.userId===currentUser.id? this.handleMarkerRightClick(obj, entity): null
+        }, 1500)
+    }
+
+    onMouseUp = (obj, entity) => {
+        clearTimeout(this.clickTimer)
+        if (!this.state.rightClickMenuShown) {
+            this.handleMarkerClick(obj, entity)
+        }
     }
 
     render() {
@@ -203,9 +215,6 @@ class Map extends React.Component {
                     ref = {this.scene}
                     onPostRender={this.handlePostSceneRender}
                     />   
-
-                    <Globe onTileLoadProgress={this.handlePostSceneRender}/>
-
                     <Camera />
                     {
                         location? <CameraFlyTo destination={new Cartesian3.fromDegrees(location.longitude, location.latitude, 20000)} onComplete={this.handleFlyToComplete}/> : null
@@ -226,8 +235,10 @@ class Map extends React.Component {
                                     title = {name}
                                     description = {description}
                                     position={new Cartesian3.fromDegrees(longitude, latitude, height)} 
-                                    onClick={this.handleMarkerClick}
-                                    onRightClick={currentUser&&this.props.match.params.id===currentUser.id? this.handleMarkerRightClick: null}
+                                    // onClick={this.handleMarkerClick}
+                                    onRightClick={currentUser&&this.props.match.params.userId===currentUser.id? this.handleMarkerRightClick: null}
+                                    onMouseDown={this.onMouseDown}
+                                    onMouseUp={this.onMouseUp}
                                     >
                                         <BillboardGraphics image={`${process.env.PUBLIC_URL}/marker.png`} />
                                     </Entity>
@@ -249,6 +260,9 @@ class Map extends React.Component {
                                 name =  {id}
                                 position={new Cartesian3.fromDegrees(longitude, latitude, height)} 
                                 onRightClick={this.handleMarkerRightClick}
+                                onMouseDown={this.onMouseDown}
+                                onMouseUp={this.onMouseUp}
+                                
                                 >
                                     <BillboardGraphics image={`${process.env.PUBLIC_URL}/marker.png`} />
                                 </Entity>

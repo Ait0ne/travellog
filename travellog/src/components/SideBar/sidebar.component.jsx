@@ -11,6 +11,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import {LocationSearching} from '@material-ui/icons';
 import {connect} from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import { setLocation } from '../../redux/places/places.actions';
 import { toggleSideBar } from '../../redux/dialogs/dialogs.actions';
@@ -30,12 +31,17 @@ const useStyles = makeStyles({
 })
 
 
-const SideBar = ({ places, setLocation, sideBarShown, toggleSideBar }) => {
+const SideBar = ({ places, setLocation, sideBarShown, toggleSideBar, match, history }) => {
     const classes = useStyles()
 
 
     const handleLocationSearch = (event, place) => {
         setLocation({longitude: place.longitude, latitude: place.latitude})
+    }
+
+    const handleRouting = (placeId) => {
+        toggleSideBar()
+        history.push(`/${match.params.userId}/${placeId}`)
     }
 
     return (
@@ -57,7 +63,7 @@ const SideBar = ({ places, setLocation, sideBarShown, toggleSideBar }) => {
             {
                 places.length>0? places.map((place, index) => 
                 <List key={place.id} className={classes.list}>
-                        <ListItem button >
+                        <ListItem button onClick={() => handleRouting(place.id)}>
                             <ListItemText primary={place.name} />
                             <ListItemSecondaryAction>
                                 <IconButton onClick={(event)=> handleLocationSearch(event, place)}>
@@ -89,4 +95,4 @@ const mapDispatchToProps = dispatch =>({
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(SideBar);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SideBar));

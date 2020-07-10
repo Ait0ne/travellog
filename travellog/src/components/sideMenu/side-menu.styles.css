@@ -12,6 +12,7 @@
     0px 1px 8px 0px rgba(0,0,0,0.12);
     transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     border-radius: 4px;
+    z-index: 2000
 }
 
 .side-menu-form {
@@ -43,3 +44,19 @@
     font-family: Roboto;
 }
 
+.rbt-input-hint {
+    font-family: Roboto;
+}
+
+
+.side-menu-container .dropdown-menu {
+    z-index: 2000;
+}
+
+@media (max-width: 768px) {
+    .side-menu-container {
+        width:100%;
+        bottom:0;
+        right:0
+    }
+}

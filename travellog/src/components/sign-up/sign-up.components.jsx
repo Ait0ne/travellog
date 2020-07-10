@@ -10,7 +10,8 @@ import {auth, createUserProfileDocument} from '../../firebase/firebase.utils';
 
 
 const CustomTextField = styled(TextField)({
-    width: '100%',
+    width: '90%',
+    maxWidth: '400px',
     marginTop: '15px',
     backgroundColor: '#ffffff'
 })
@@ -143,7 +144,7 @@ class SignUp extends React.Component {
                     required
                     />
                     <div className='buttons'>
-                        <CustomButton color='primary' variant='contained' size='large' type='submit'>Зарегистрироваться</CustomButton>
+                        <CustomButton color='secondary' variant='contained' size='large' type='submit'>Зарегистрироваться</CustomButton>
                     </div>
                     {deviceWidth<769?
                         <div style={{marginTop:20, marginBottom:10, display:'flex', flexDirection:'column', width:'100%', alignItems: 'center'}}>

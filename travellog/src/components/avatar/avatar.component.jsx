@@ -9,7 +9,7 @@ const Avatar = ({imageUrl, width, border, onClick}) => {
             backgroundImage:`url(${imageUrl})`,
             width: `${width}px`,
             height: `${width}px`,
-            borderRadius: `${width/2}px`,
+            borderRadius: `50%`,
             border: border? '1.5px solid grey': 'none'
             }}>
         </div>

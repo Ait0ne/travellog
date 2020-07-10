@@ -4,3 +4,10 @@
     right: 0;
     bottom: 0
 }
+
+@media (max-width:768px) {
+    .MuiFab-root {
+        right: 5px !important;
+        bottom: 5px !important
+    }
+}

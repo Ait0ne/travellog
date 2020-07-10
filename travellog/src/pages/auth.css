@@ -23,7 +23,6 @@
     border-radius: 10px;
     box-shadow:  3px 3px 4px rgba(190, 190, 190, 0.6), 
     -3px -3px 4px rgba(190, 190, 190, 0.6);
-
 }
 
 @media (max-width:768px) {
@@ -31,7 +30,8 @@
         overflow:hidden;
         width:90%;
         position: relative;
-        padding:10px
+        padding:10px;
+        justify-content: space-between;
     }
     .auth-small-device-container{
         width:200%;

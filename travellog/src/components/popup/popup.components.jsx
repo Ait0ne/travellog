@@ -78,7 +78,7 @@ class Popup extends React.Component {
                 <div className='popup-content-container'> 
                 {   
                     isLoading ? 
-                    <CircularProgress />
+                    <CircularProgress color='secondary'/>
                     :
                     <div>
                         {

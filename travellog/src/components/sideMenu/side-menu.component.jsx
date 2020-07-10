@@ -95,6 +95,11 @@ const SideMenu = ({setLocation, newPlaces, clearNewPlaces, toggleEditing, curren
         setAnchorEl(null)
     }
 
+    const handleSideMenuClose = () => {
+        clearNewPlaces();
+        toggleEditing();
+    }
+
     
     return (
 
@@ -129,7 +134,8 @@ const SideMenu = ({setLocation, newPlaces, clearNewPlaces, toggleEditing, curren
                                 Нажмите на точку на карте, чтобы добавить метку
                             </Typography>
                             <Typography className={classes.typography}>
-                                Нажатие правой кнопкой мышки по метке позволит удалить ее
+                                Нажатие правой кнопкой мышки по метке позволит удалить ее,
+                                или нажмите на метку и удерживайте на мобильном устройстве
                             </Typography>
                         </Popover>
                     </Toolbar>
@@ -145,12 +151,16 @@ const SideMenu = ({setLocation, newPlaces, clearNewPlaces, toggleEditing, curren
                         placeholder='Найти место'
                         onSearch={handleSearch}
                         options={options}
-                        onChange={handleTypeaheadChange}                  
+                        onChange={handleTypeaheadChange}   
+                        flip               
                         />
 
                         <div className='side-menu-form-buttons'>
                             <Button  type='submit' color='secondary'>
                                 Сохранить
+                            </Button>
+                            <Button color='secondary' onClick={handleSideMenuClose}>
+                                Отменить
                             </Button>
                         </div>
                     </form>

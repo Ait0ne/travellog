@@ -1,6 +1,7 @@
 .dropzone-container {
     width: 350px;
     max-height: 350px;
+    justify-self: center;
 }
 .dropzone {
     width:100%;
@@ -29,4 +30,10 @@
     font-weight: 400;
     line-height: 1.66;
     letter-spacing: 0.03333em;
+}
+
+@media (max-width: 768px) {
+    .dropzone-container {
+        width: 280px;
+    }
 }

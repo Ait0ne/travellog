@@ -10,7 +10,8 @@ import { auth, signInWithFacebook, signInwithGoogle} from '../../firebase/fireba
 
 
 const CustomTextField = styled(TextField)({
-    width: '100%',
+    width: '90%',
+    maxWidth: '400px',
     marginTop: '15px',
     backgroundColor: '#ffffff'
 })
@@ -64,7 +65,7 @@ class  SignIn extends React.Component{
         })
         .catch(err => {
             console.log(err)
-            if (err.code!=="auth/popup-closed-by-user") {
+            if (err.code!=="auth/popup-closed-by-user"&&err.code!=="auth/cancelled-popup-request") {
                 this.props.handleAlert('Аккаунт ассоциирован с другим методом аутентификации', 'error')
             }
         })
@@ -79,7 +80,7 @@ class  SignIn extends React.Component{
         })
         .catch(err => {
             console.log(err)
-            if (err.code!=="auth/popup-closed-by-user") {
+            if (err.code!=="auth/popup-closed-by-user"&&err.code!=="auth/cancelled-popup-request") {
                 this.props.handleAlert('Аккаунт ассоциирован с другим методом аутентификации', 'error')
             }
         })
@@ -90,10 +91,10 @@ class  SignIn extends React.Component{
         const { email, password, passwordVisible } = this.state
         return (
             <div className='sign-in'>
-                <div className='form-title'>
-                    <h2>Вход</h2>
-                </div>
                 <form onSubmit={this.handleSubmit}>
+                    <div className='form-title'>
+                        <h2>Вход</h2>
+                    </div>
                     <CustomTextField
                     name='email'
                     type='email'
@@ -123,7 +124,7 @@ class  SignIn extends React.Component{
                     required
                     />
                     <div className='buttons'>
-                        <CustomButton color='primary' size='large' variant='contained' type='submit'>
+                        <CustomButton color='secondary' size='large' variant='contained' type='submit'>
                             Войти
                         </CustomButton>
                     </div>
@@ -131,16 +132,16 @@ class  SignIn extends React.Component{
 
                         <img className='google' src='/google.png' alt='google-icon' onClick={this.handleSignInWithGoogle}/>
                         <img className='facebook' src='/facebook.png' alt='facebook-icon' onClick={this.handleSignInWithFaceBook}/>
-                        {deviceWidth<769?
-                        <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end'}}>
-                            <span style={{color:'black'}}>Нет аккаунта?</span>
-                            <span onClick={()=>translate(-50)} style={{textDecoration: 'underline', fontWeight:'bold', color:'#303f9f', cursor:'pointer'}}>Регистрация</span>
-                        </div>
-                        :null
-                        }
                     </div>
 
                 </form>
+                {deviceWidth<769?
+                <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                    <span style={{color:'black'}}>Нет аккаунта?</span>
+                    <span onClick={()=>translate(-50)} style={{textDecoration: 'underline', fontWeight:'bold', color:'#303f9f', cursor:'pointer'}}>Регистрация</span>
+                </div>
+                :null
+                }
             </div>
         )
     }
