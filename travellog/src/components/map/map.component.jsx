@@ -1,5 +1,4 @@
 import React, {Fragment, createRef} from 'react';
-import './map.styles.css';
 import { Viewer, Scene, Camera, Entity, BillboardGraphics, CustomDataSource, CameraFlyTo, Globe} from 'resium';
 import { Math, Color, MapboxStyleImageryProvider,  Cartesian3, Cartesian2, EntityCluster, PinBuilder} from 'cesium';
 import Popup from '../popup/popup.components';
