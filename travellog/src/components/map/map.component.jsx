@@ -15,9 +15,11 @@ const my_token = 'pk.eyJ1IjoiYWl0MG5lIiwiYSI6ImNrYzRtdjN2dTA5OXkzMG52YWtxa2puMTg
 
 const mapbox = new MapboxStyleImageryProvider({
     styleId: 'light-v10',
+    // styleId:'satellite-streets-v11',
     accessToken: my_token,
     defaultHue: 1
 })
+
 
 // const providerViewModels = []
 
@@ -77,6 +79,15 @@ class Map extends React.Component {
         const {setCurrentPlaces} = this.props
         console.log(this.cesium.current.cesiumElement)
         this.cesium.current.cesiumElement.camera.flyTo({destination:new Cartesian3.fromDegrees(37.618423,55.751244, 12000000)})
+        // var previousTime = Date.now();
+
+        // this.cesium.current.cesiumElement.scene.postRender.addEventListener(function (scene, time){
+        //     var spinRate = 0.2;
+        //     var currentTime = Date.now();
+        //     var delta = ( currentTime - previousTime ) / 1000;
+        //     previousTime = currentTime;
+        //     scene.camera.rotate(Cartesian3.UNIT_Z, -spinRate * delta);
+        // });
         this.unsubscribeFromPlaces = firestore
         .collection('users')
         .doc(this.props.match.params.userId)
@@ -221,6 +232,8 @@ class Map extends React.Component {
                     geocoder={false}
                     selectionIndicator={false}
                     // imageryProviderViewModels={providerViewModels}
+                    
+
                     >
 
                     <Scene 
@@ -229,9 +242,8 @@ class Map extends React.Component {
                     onPostRender={this.handlePostSceneRender}
                     />   
                     <Globe 
-                    baseColor={Color.WHITESMOKE} 
-                    fillHighlightColor={Color.BLACK}
-                    atmosphereBrightnessShift={0.1}
+                    showGroundAtmosphere={false}
+                    
                     />
                     <Camera />
                     {

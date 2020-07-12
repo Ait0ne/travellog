@@ -21,7 +21,8 @@ class Auth extends React.Component {
             deviceWidth:0,
             x:0,
             alertShown: false,
-            alertText: ''
+            alertText: '',
+            alertSeverity: ''
         }
         this.updateDeviceWidth=this.updateDeviceWidth.bind(this)
         this.changeSignInSignUp=this.changeSignInSignUp.bind(this)

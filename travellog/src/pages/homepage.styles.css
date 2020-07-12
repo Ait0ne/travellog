@@ -1,11 +1,12 @@
 .dropzone-container {
     width: 350px;
-    max-height: 350px;
+    max-height: 300px;
     justify-self: center;
+    overflow-y: auto;
 }
 .dropzone {
     width:100%;
-    height: 200px;
+    height: 30%;
     background-color: rgba(224, 218, 218, 0.3);
     border-radius: 4px;
     display: flex;
@@ -30,10 +31,41 @@
     font-weight: 400;
     line-height: 1.66;
     letter-spacing: 0.03333em;
+    margin-bottom: 0;
 }
 
+.react-daterange-picker__wrapper {
+    width: 100%;
+    flex-grow: 0;
+}
+.react-daterange-picker__inputGroup {
+    min-width: 40px
+}
+.MuiDialog-paper {
+    overflow-y: visible !important;
+}
+
+.react-daterange-picker__wrapper {
+    height:30px;
+    border: none;
+    border-bottom: 1px solid  rgba(0,0,0,0.42);
+    margin-top: 10px;
+    font-family: "Roboto";
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.66;
+    letter-spacing: 0.03333em;
+}
+.react-daterange-picker__inputGroup {
+    flex-grow: 0;
+}
 @media (max-width: 768px) {
     .dropzone-container {
         width: 240px;
+        height: 180px;
     }
+    .dropzone {
+        height: 160px
+    }
+
 }

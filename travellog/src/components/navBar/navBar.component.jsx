@@ -3,6 +3,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import {connect} from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { Menu, MenuItem, Typography } from '@material-ui/core';
+import {motion} from 'framer-motion';
 
 import Avatar from '../avatar/avatar.component';
 import { toggleSideBar } from '../../redux/dialogs/dialogs.actions';
@@ -11,7 +12,7 @@ import { auth } from '../../firebase/firebase.utils';
 import './navBar.styles.css';
 
 
-const NavBar = ({toggleSideBar, currentUser, location }) => {
+const NavBar = ({toggleSideBar, currentUser, location, history }) => {
     const [menuOpen, setMenuOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
 
@@ -27,18 +28,14 @@ const NavBar = ({toggleSideBar, currentUser, location }) => {
     }
 
     return (
-        <div className='navigation-container'>
-
+        <div className='navigation-container' 
+        style={location.pathname==='/'?{
+            backgroundColor:'transparent',
+            borderBottom:'none',
+            position:'absolute'
+        }: null}
+        >
             <div className='navigation'>
-                {
-                    location.pathname.match(/\/\w+\/\w+/)&&!location.pathname.match(/map/)?
-                    <Link to={`/map/${location.pathname.split('/')[1]}`}>
-                        <img className='left-margin' alt='globe' height={40} src={process.env.PUBLIC_URL+'/globe.png'}></img>
-                        <span className='app-title'>Travellog</span>
-                    </Link>
-                    : 
-                    null
-                }
                 {
                     location.pathname.match(/map\//)?
                     <span>
@@ -47,7 +44,22 @@ const NavBar = ({toggleSideBar, currentUser, location }) => {
                             <span className='app-title'>Travellog</span>
                         </Link>
                     </span>
-                    :null
+                    :
+                    <span className='app-logo' onClick={() => {
+                        if (location.pathname==='/') {
+                            history.push('/')
+                        } else {
+                            history.goBack()
+                        }
+                    }}>
+                        <motion.img 
+                        whileHover={{rotate: 360, transition: {duration: 1}}}
+                        className='left-margin' 
+                        alt='globe' 
+                        height={40} 
+                        src={process.env.PUBLIC_URL+'/globe.png'}/>
+                        <span className='app-title'>Travellog</span>
+                    </span>
                 }
                 
                 {
@@ -62,7 +74,9 @@ const NavBar = ({toggleSideBar, currentUser, location }) => {
                             <Link onClick={handleMenuClose} to={`/map/${currentUser.id}`}>
                                 <MenuItem>Моя Карта</MenuItem>
                             </Link>
-                            <MenuItem>Профиль</MenuItem>
+                            <Link onClick={handleMenuClose} to='/profile'>
+                                <MenuItem>Профиль</MenuItem>
+                            </Link>
                             <MenuItem onClick={() => {
                                 auth.signOut()
                                 handleMenuClose()

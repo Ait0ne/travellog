@@ -47,3 +47,7 @@
 .left-margin {
     margin-left: 10px;
 }
+
+.app-logo {
+    cursor: pointer;
+}

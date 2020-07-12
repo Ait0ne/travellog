@@ -104,7 +104,7 @@ export const getImages = (placeId, userId) => {
     })
 }
 
-export const addImages = async (images, placeId, userId, name, description) => {
+export const addImages = async (images, placeId, userId, name, description, dateRange) => {
     const batch = firestore.batch()
     images.forEach(image => {
         if (!image.match(/medium/)) {
@@ -129,7 +129,8 @@ export const addImages = async (images, placeId, userId, name, description) => {
                 .doc(placeId)
                 batch.update(placeRef, {
                     name: name,
-                    description:description
+                    description:description,
+                    dateRange: dateRange
                 })
             }
         }    
@@ -180,13 +181,14 @@ firebase.initializeApp(config);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-const googleProvider = new firebase.auth.GoogleAuthProvider();
+export const googleProvider = new firebase.auth.GoogleAuthProvider();
 googleProvider.setCustomParameters({prompt:'select_account'});
 export const signInwithGoogle = () => auth.signInWithPopup(googleProvider)
 
-const facebookProvider = new firebase.auth.FacebookAuthProvider();
+export const facebookProvider = new firebase.auth.FacebookAuthProvider();
 facebookProvider.setCustomParameters({prompt:'select_account'});
 export const signInWithFacebook = () => auth.signInWithPopup(facebookProvider)
 
+export const emailProvider = firebase.auth.EmailAuthProvider
 
 export default firebase;

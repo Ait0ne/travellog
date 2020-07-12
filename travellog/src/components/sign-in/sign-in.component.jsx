@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button, InputAdornment, IconButton, TextField } from '@material-ui/core'
+import { Button, InputAdornment, IconButton, TextField, Dialog, DialogTitle, DialogContent, DialogContentText } from '@material-ui/core'
 import { Visibility, VisibilityOff }  from '@material-ui/icons/'
 import { styled } from '@material-ui/core/styles'
 import {withRouter} from 'react-router-dom';
+
 
 import './sign-in.styles.css'
 
@@ -21,6 +22,19 @@ const CustomButton = styled(Button)({
     marginTop: '15px',
 })
 
+const CustomDialogContent =styled(DialogContent)({
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    maxWidth: '400px'
+
+})
+
+const CustomDialog = styled(Dialog)({
+    textAlign: 'center',
+
+})
+
 
 class  SignIn extends React.Component{
     constructor(props) {
@@ -28,7 +42,10 @@ class  SignIn extends React.Component{
         this.state = {
             email:'',
             password: '',
-            passwordVisible: false
+            passwordVisible: false,
+            resetEmail: '',
+            resetPasswordShown: false,
+
         }
     }
 
@@ -86,9 +103,28 @@ class  SignIn extends React.Component{
         })
     }
 
+    toggleResetPassword = () => {
+        this.setState({resetPasswordShown: !this.state.resetPasswordShown})
+    }
+
+    handleResetPassword = (event) => {
+        event.preventDefault();
+        auth.sendPasswordResetEmail(this.state.resetEmail)
+        .then(() => {
+            this.toggleResetPassword()
+            this.setState({resetEmail: ''})
+            this.props.handleAlert('На вашу почту отправлено письмо с указаниями по восстановлению пароля', 'success')
+        })
+        .catch(err => {
+            this.toggleResetPassword()
+            this.setState({resetEmail: ''})
+            this.props.handleAlert('При отправке письма произошла ошибка', 'error')
+        })
+    }
+
     render() {
         const {translate, deviceWidth} = this.props
-        const { email, password, passwordVisible } = this.state
+        const { email, password, passwordVisible, resetPasswordShown, resetEmail } = this.state
         return (
             <div className='sign-in'>
                 <form onSubmit={this.handleSubmit}>
@@ -128,6 +164,7 @@ class  SignIn extends React.Component{
                             Войти
                         </CustomButton>
                     </div>
+                    <span onClick={this.toggleResetPassword} className='password-reset-button'>Забыли пароль?</span>
                     <div className='buttons-left'>
 
                         <img className='google' src='/google.png' alt='google-icon' onClick={this.handleSignInWithGoogle}/>
@@ -135,6 +172,35 @@ class  SignIn extends React.Component{
                     </div>
 
                 </form>
+                <CustomDialog 
+                aria-labelledby='resetPasswordTitle'
+                open={resetPasswordShown}
+                onClose={this.toggleResetPassword}
+                >
+                    <DialogTitle id='resetPasswordTitle'>
+                        Восстановление пароля
+                    </DialogTitle>
+                    <CustomDialogContent>
+                        <DialogContentText>
+                            Введите адрес электронной почты и мы вышлем Вам инструкции для восстановления пароля
+                        </DialogContentText>
+                        <form onSubmit={this.handleResetPassword}>
+                        <CustomTextField
+                        name='resetEmail'
+                        type='email'
+                        onChange={this.handleChange}
+                        value={resetEmail}
+                        label='Email'
+                        variant='outlined'
+                        color='primary'
+                        required
+                        />
+                        <CustomButton type='submit' color='secondary'>
+                            Отправить
+                        </CustomButton>
+                        </form>
+                    </CustomDialogContent>
+                </CustomDialog>
                 {deviceWidth<769?
                 <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
                     <span style={{color:'black'}}>Нет аккаунта?</span>

@@ -7,17 +7,18 @@ import {
     TextField, 
     Button, 
     Typography, 
-    LinearProgress, 
+    LinearProgress,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { toggleCreateAlbum } from '../redux/dialogs/dialogs.actions';
 import { styled } from '@material-ui/core/styles';
 import Dropzone from 'react-dropzone';
 import CloudUpload from '@material-ui/icons/CloudUpload';
+import DateRange from '@material-ui/icons/DateRange'
 import axios from 'axios'
 import { addImages } from '../firebase/firebase.utils';
 import {motion} from 'framer-motion';
-
+import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 
 import Fallback from '../components/fallback/falback.component';
 import {API_URL} from '../config';
@@ -30,7 +31,9 @@ const Map = lazy(() => import('../components/map/map.component'));
 
 const CustomDialogContent = styled(DialogContent)({
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    overflow: 'visible',
+    padding:'0 24px'
 })
 
 const CustomCloudUploadIcon = styled(CloudUpload)({
@@ -39,8 +42,12 @@ const CustomCloudUploadIcon = styled(CloudUpload)({
 })
 
 const CustomTypography = styled(Typography)({
-    marginTop: '20px',
+    marginTop: '2px',
     cursor: 'default'
+})
+
+const CustomDialogTitle = styled(DialogTitle)({
+    padding: '8px 24px 0 24px'
 })
 
 
@@ -54,12 +61,14 @@ class Homepage extends React.Component{
            noNameError: false,
            noImagesError: false, 
            isUploading: false ,
+           dateRange: [new Date(), new Date()],
+           noDateError: false
         }
     }
 
 
     handleSubmit = () => {
-        const { name, description, files} = this.state
+        const { name, description, files, dateRange} = this.state
         const {selectedMarker, currentUser} = this.props
         console.log(name, description)
         console.log(files)
@@ -69,7 +78,10 @@ class Homepage extends React.Component{
         if (files.length===0) {
             this.setState({ noImagesError: true })
         }
-        if (files.length>0 && name!=='') {
+        if (!dateRange) {
+            this.setState({noDateError: true})
+        }
+        if (files.length>0 && name!==''&&dateRange) {
             this.setState({isUploading:true})
             const data = new FormData()
             files.map(file => {
@@ -83,7 +95,7 @@ class Homepage extends React.Component{
                 const images = response.data.files
                 console.log(images)
                 if (images) {
-                    addImages(images,selectedMarker.name, currentUser.id, name, description )
+                    addImages(images,selectedMarker.name, currentUser.id,  name, description, dateRange )
                     .then(result => {
                         this.setState( { isUploading: false })
                         this.handleClose()
@@ -105,13 +117,17 @@ class Homepage extends React.Component{
     }
 
     handleClose = () => {
-        this.setState({name: '', files: [], description: '', noNameError: false, noImagesError: false})
+        this.setState({name: '', files: [], description: '', noNameError: false, noImagesError: false, noDateError: false})
         this.props.toggleCreateAlbum()
+    }
+
+    handleDatePickerChange = (value) => {
+        this.setState({dateRange: value})
     }
     
     render() {
         const { createAlbumShown, currentUser} = this.props
-        const { name, description, files, noNameError, noImagesError, isUploading } = this.state
+        const { name, description, files, noNameError, noImagesError, isUploading, dateRange, noDateError } = this.state
         return (
             <motion.div
             key='homepage'
@@ -131,9 +147,9 @@ class Homepage extends React.Component{
                 onClose={this.handleClose}
                 aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id='form-dialog-title'>
+                    <CustomDialogTitle id='form-dialog-title'>
                         Создание Альбома
-                    </DialogTitle>
+                    </CustomDialogTitle>
                     <CustomDialogContent>
                         <TextField 
                         error={noNameError}
@@ -144,6 +160,8 @@ class Homepage extends React.Component{
                         value={name} 
                         label='Название альбома'
                         onChange={this.handleChange}
+                        margin='none'
+                        size='small'
                         required
                         />
                         <TextField 
@@ -154,7 +172,24 @@ class Homepage extends React.Component{
                         label='Описание'
                         multiline
                         rowsMax={4}
+                        margin='none'
+                        size='small'
                         onChange={this.handleChange}
+                        />
+                        <CustomTypography color={`${noDateError?'error':'textSecondary'}`}>
+                            Даты альбома *
+                        </CustomTypography>
+                        {
+                            noDateError?
+                            <p className='form-error-message'>Поле должно быть заполнено</p>
+                            :null
+                        }
+                        <DateRangePicker 
+                        onChange={this.handleDatePickerChange}
+                        value={dateRange}
+                        calendarIcon={<DateRange/>}
+                        minDate= {new Date('Jan 1, 1970 00:00:00')}
+                        maxDate={new Date()}
                         />
                         <CustomTypography color={`${noImagesError?'error':'textSecondary'}`}>
                             Добавить изображения *

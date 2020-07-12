@@ -49,6 +49,14 @@
     justify-content: center;
 }
 
+.password-reset-button {
+    font-size: small;
+    cursor: pointer;
+    color: #4285F4;
+    text-decoration: underline;
+    margin-top: 5px;
+}
+
 @media (max-width:768px) {
     .sign-in {
         padding-right: 0;

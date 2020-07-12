@@ -10,7 +10,11 @@ const fsExtra = require('fs-extra');
 const AWS=require('aws-sdk');
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config()
-
+try{
+    fs.mkdirSync(path.join(__dirname, 'avatars'))
+} catch {
+    
+}
 
 
 const s3 = new AWS.S3();
@@ -31,7 +35,9 @@ const port = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
+app.use(cors({
+    origin: ['http://radiant-reef-63518.herokuapp.com/', 'http://localhost:3000/']
+}));
 
 
 if (process.env.NODE_ENV==='production') {
@@ -44,7 +50,7 @@ if (process.env.NODE_ENV==='production') {
 
 
 app.post('/images', upload.array('file'), async (req, res) => {
-    const {placeId, userId} = req.body
+    const {placeId, userId, avatar} = req.body
     const images = req.files
     let files = null
     await Promise.all(images.map(image => {
@@ -52,7 +58,7 @@ app.post('/images', upload.array('file'), async (req, res) => {
         .resize(300,300)
         .toBuffer()
         .then( data => {
-            return fs.writeFile(path.join(__dirname,`uploads/medium-${image.originalname}`), data, (err) => {
+            return fs.writeFile(path.join(__dirname,`${avatar?'avatars':'uploads'}/medium-${image.originalname}`), data, (err) => {
                 if (err) {
                     console.log('1',err)
                 }
@@ -64,13 +70,13 @@ app.post('/images', upload.array('file'), async (req, res) => {
     }))
     files = await new uploader.default({
         bucket:'travellogserverbucket',
-        localPath: path.join(__dirname,'uploads'),
-        remotePath: `${userId}/${placeId}`,
+        localPath: path.join(__dirname,`${avatar?'avatars':'uploads'}`),
+        remotePath: `${userId}/${avatar? 'avatar':placeId}`,
         glob: '*.jpg',
         accessControlLevel:'public-read'
     }, ).upload()
     fsExtra.emptyDir(path.join(__dirname,'uploads'))
-    
+    fsExtra.emptyDir(path.join(__dirname,'avatars'))
     if (files) {
         res.status(200).json({files:files})
     } else {
@@ -98,6 +104,8 @@ app.post('/deleteImage', (req, res) => {
 
     })
 })
+
+
 
 
 app.listen(port, err => {

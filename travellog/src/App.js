@@ -1,4 +1,4 @@
-import React, { Fragment} from 'react';
+import React, { Fragment, lazy, Suspense} from 'react';
 import './App.css';
 import { hot } from 'react-hot-loader/root';
 import {Switch,Route, Redirect, withRouter} from 'react-router-dom';
@@ -11,12 +11,13 @@ import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import NavBar from './components/navBar/navBar.component';
 import FullScreenImage from './components/fullScreenImage/fullScreenImage.component';
 import Homepage from './pages/homepage';
-import Album from './pages/album';
+// import Album from './pages/album';
 import Auth from './pages/auth'
 import Landing from './pages/landing';
+import Profile from './pages/profile';
 
 // const Homepage = lazy(() => import('./pages/homepage'));
-// const Album = lazy(()=>import('./pages/album'));
+const Album = lazy(()=>import('./pages/album'));
 
 class App extends React.Component {
   state = {
@@ -36,8 +37,9 @@ class App extends React.Component {
               ...snapShot.data()
             });
           });
+        } else {
+            setCurrentUser(null);
         }
-      setCurrentUser(userAuth);
       this.setState({isLoading:false})
     });
   }
@@ -59,15 +61,19 @@ class App extends React.Component {
           this.state.isLoading? 
           <Fallback />
           :
+          <Suspense fallback={<Fallback/>}>
           <AnimatePresence exitBeforeEnter>
             <Switch location={location} key={location.pathname}>
                 <Route exact path='/'  component={Landing}/>
                 <Route exact path='/auth' render={() => currentUser ? 
                 (<Redirect to='/'/>) : (<Auth/>)}/>
+                <Route exact path='/profile' render={() => !currentUser ? 
+                (<Redirect to='/'/>) : (<Profile/>)}/>
                 <Route exact path='/map/:userId' component={Homepage}/>
                 <Route exact path='/:userId/:placeId' component={Album}/>
             </Switch>
           </AnimatePresence>
+          </Suspense>
         }
         <FullScreenImage />
       </Fragment>

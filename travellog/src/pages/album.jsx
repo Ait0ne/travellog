@@ -48,7 +48,7 @@ class Album extends React.Component {
         .get()
         .then(userRef => {
             userRef.exists?
-            this.setState({avatarUrl: userRef.data()})
+            this.setState({avatarUrl: userRef.data().avatarUrl})
             : this.setState({avatarUrl: '/defaultAvatar.jpg'})
             }
         )
@@ -126,6 +126,7 @@ class Album extends React.Component {
         const { toggleDescriptionEdit, editDescriptionShown, match, currentUser } = this.props
         return (
             <Fragment>
+                {console.log(avatarUrl)}
                 {
                     !isLoading?
                     <motion.div
@@ -179,8 +180,8 @@ class Album extends React.Component {
                                         {
                                             currentUser&& match.params.userId===currentUser.id?
                                             <div className='image-actions-buttons' >
-                                                <button onClick={(event) => this.handleImageClick(event, image)} className='image-action-button'>Просмотр</button>
-                                                <button onClick={(event) => this.handleDeleteImage(event, image)} className='image-action-button'><Delete/></button>
+                                                <button onClick={(event) => this.handleImageClick(event, image)} className='image-action-button view'>Просмотр</button>
+                                                <button onClick={(event) => this.handleDeleteImage(event, image)} className='image-action-button delete'><Delete/></button>
                                             </div>
                                             : null
                                         }
