@@ -123,6 +123,7 @@ class Album extends React.Component {
     }
 
     onMouseDown = (event) => {
+        console.log('1',event)
         const { currentUser, match } = this.props
         this.clickTimer = setTimeout(() => {
             if (currentUser&& match.params.userId===currentUser.id) {
@@ -132,6 +133,7 @@ class Album extends React.Component {
     }
 
     onMouseUp = (event, image) => {
+        console.log('2',event)
         clearTimeout(this.clickTimer)
         if (!this.state.deleteButtonShown) {
             this.handleImageClick(image)
@@ -141,6 +143,15 @@ class Album extends React.Component {
         if (this.state.deleteButtonShown) {
             this.setState({deleteButtonShown: false})
         }
+    }
+
+    handleContextMenu = event => {
+        event.preventDefault();
+        this.setState({deleteButtonShown: true})
+    }
+
+    handleTouchStart = event => {
+        event.preventDefault();
     }
 
 
@@ -197,15 +208,17 @@ class Album extends React.Component {
                                     onMouseDown={this.onMouseDown}
                                     onMouseUp={(event)=>this.onMouseUp(event, image)}
                                     onMouseLeave={this.onMouseLeave}
+                                    onTouchStart={this.handleTouchStart}
+                                    // onTouchEnd={(event)=>this.onMouseUp(event, image)}
+                                    onContextMenu={this.handleContextMenu}
                                     >   
                                         {
                                             deleteButtonShown?
-                                            <div className='image-actions-buttons' >
+                                            <div className='image-actions-buttons' onClick={() =>this.handleImageClick(image)} >
                                                 <button onClick={(event) => this.handleDeleteImage(event, image)} className='image-action-button delete'><Delete/></button>
                                             </div>
                                             : null
                                         }
-                                        {console.log(deviceWidth)}
                                         <LazyLoadImage className='album-image' width={deviceWidth&&deviceWidth<955? (deviceWidth-45)/3 : 300} height={deviceWidth&&deviceWidth<955? (deviceWidth-45)/3 : 300}  src={`${AWS_URL}${image.mediumImageUrl}`}/>
                                     </div>
                                     )

@@ -52,7 +52,8 @@
 }
 
 .album-image:hover {
-    opacity: 0.8
+    opacity: 0.8;
+    cursor: pointer;
 }
 
 
@@ -82,7 +83,7 @@
 .image-action-button.delete {
     position: absolute;
     top: 2px;
-    left: 2px
+    left: 2px;
 }
 
 .image-action-button:hover {
