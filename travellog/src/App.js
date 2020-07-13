@@ -49,7 +49,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { currentUser, location } = this.props
+    const { currentUser, location, isFullscreenImageShown } = this.props
     return (
       <Fragment>
         {
@@ -75,14 +75,18 @@ class App extends React.Component {
           </AnimatePresence>
           </Suspense>
         }
-        <FullScreenImage />
+        {
+          isFullscreenImageShown?<FullScreenImage />:null
+        }
+        
       </Fragment>
     )
   };
 }
 
 const mapStateTopProps = (state) => ({
-  currentUser: state.user.currentUser
+  currentUser: state.user.currentUser,
+  isFullscreenImageShown: state.images.isFullscreenImageShown
 })
 
 const mapDispatchToProps = dispatch => ({

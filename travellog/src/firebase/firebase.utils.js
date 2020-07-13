@@ -95,6 +95,7 @@ export const getImages = (placeId, userId) => {
     .collection('places')
     .doc(placeId)
     .collection('images')
+    .orderBy('createdAt', 'desc')
     .get()
     .then(ref => {
         return ref

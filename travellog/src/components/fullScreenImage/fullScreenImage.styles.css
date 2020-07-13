@@ -1,0 +1,31 @@
+.fullscreen-image {
+    max-width: 100%;
+    height: auto;
+    width:auto;
+    max-height: 100%;
+
+}
+
+.fullscreen-image-container:focus {
+    outline: none;
+
+    
+}
+.fullscreen-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width:90%;
+    max-height: 90%;
+}
+
+.fullscreen-image:focus {
+    outline: none;
+}
+
+@media (max-width: 768px) {
+    .fullscreen-image-container {
+        max-width: 100%;
+
+    }
+}

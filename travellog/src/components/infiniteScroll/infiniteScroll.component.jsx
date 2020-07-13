@@ -96,7 +96,7 @@ const InfiniteScroll =({images, toggleFullscreenImage, setFullScreenImage}) => {
     }
 
     const handleImageClick = (event) => {
-        setFullScreenImage(event.target.src.replace('medium-', ''))
+        setFullScreenImage(event.target.src.replace('medium-','').replace(`${AWS_URL}`, ''))
         toggleFullscreenImage()
     }
 
@@ -113,6 +113,7 @@ const InfiniteScroll =({images, toggleFullscreenImage, setFullScreenImage}) => {
                                 {currentImages.map((img,index) => 
                                     // <Swipeable  key={index} onSwipedLeft={handleLeft} onSwipedRight={handleRight}{...config} className='slide'>
                                     <div key ={index}  className='slide'>
+                                        
                                         <img  onClick={handleImageClick}  className='slide-image'  src={`${AWS_URL}${img.mediumImageUrl}`} style={{width:'100%', userSelect:'none'}}  alt='flower'/>
                                     </div>
                                     //  </Swipeable> 

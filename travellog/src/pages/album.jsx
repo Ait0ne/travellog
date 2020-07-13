@@ -12,7 +12,7 @@ import UploadImageDialog from '../components/uploadImageDialog/uploadImageDialog
 import Avatar from '../components/avatar/avatar.component';
 import {AWS_URL, API_URL} from '../config';
 import {firestore, removeImage} from '../firebase/firebase.utils';
-import { setFullScreenImage, toggleFullscreenImage } from '../redux/images/images.actions';
+import { setFullScreenImage, toggleFullscreenImage, setImages } from '../redux/images/images.actions';
 import { toggleAddImages, toggleDescriptionEdit } from '../redux/dialogs/dialogs.actions';
 import './album.css';
 import Fallback from '../components/fallback/falback.component';
@@ -28,14 +28,15 @@ class Album extends React.Component {
     constructor(props) {
         super(props)
         this.state={
-            images: [],
             place: null,
             isLoading: true,
             avatarUrl: '',
-            deviceWidth: null
+            deviceWidth: null,
+            deleteButtonShown: false
         }
     }
     unsubscribeFromImages = null
+    clickTimer = null;
 
     componentDidMount() {
         const {userId, placeId} = this.props.match.params
@@ -74,7 +75,8 @@ class Album extends React.Component {
                 snapshot.docs.map((doc)=> 
                     images.push({ ...doc.data(), id:doc.id})
                 )
-                this.setState({images: images, isLoading:false})
+                this.props.setImages(images)
+                this.setState({isLoading:false})
             })
         })
     }
@@ -88,9 +90,9 @@ class Album extends React.Component {
         this.setState({deviceWidth: document.body.scrollWidth})
     }
 
-    handleImageClick = (event,image) => {
+    handleImageClick = (image) => {
         const { toggleFullscreenImage, setFullScreenImage } = this.props
-        setFullScreenImage(`${AWS_URL}${image.imageUrl}`)
+        setFullScreenImage(image.imageUrl)
         toggleFullscreenImage()
     }
 
@@ -120,10 +122,31 @@ class Album extends React.Component {
         this.setState({place:{...this.state.place, name: newName, description: newDescription}})
     }
 
+    onMouseDown = (event) => {
+        const { currentUser, match } = this.props
+        this.clickTimer = setTimeout(() => {
+            if (currentUser&& match.params.userId===currentUser.id) {
+                return this.setState({deleteButtonShown:true})
+            }
+        }, 1000)
+    }
+
+    onMouseUp = (event, image) => {
+        clearTimeout(this.clickTimer)
+        if (!this.state.deleteButtonShown) {
+            this.handleImageClick(image)
+        }
+    }
+    onMouseLeave = (event) => {
+        if (this.state.deleteButtonShown) {
+            this.setState({deleteButtonShown: false})
+        }
+    }
+
 
     render() {
-        const { isLoading, images, place, avatarUrl, deviceWidth } = this.state
-        const { toggleDescriptionEdit, editDescriptionShown, match, currentUser } = this.props
+        const { isLoading,  place, avatarUrl, deviceWidth, deleteButtonShown } = this.state
+        const { toggleDescriptionEdit, editDescriptionShown, match, currentUser, images } = this.props
         return (
             <Fragment>
                 {console.log(avatarUrl)}
@@ -171,16 +194,13 @@ class Album extends React.Component {
                                     <div 
                                     key={index}  
                                     className='album-image-container'
-                                    onClick={
-                                        !(currentUser&& match.params.userId===currentUser.id)?
-                                        (event) => this.handleImageClick(event, image)
-                                        :null
-                                    }
+                                    onMouseDown={this.onMouseDown}
+                                    onMouseUp={(event)=>this.onMouseUp(event, image)}
+                                    onMouseLeave={this.onMouseLeave}
                                     >   
                                         {
-                                            currentUser&& match.params.userId===currentUser.id?
+                                            deleteButtonShown?
                                             <div className='image-actions-buttons' >
-                                                <button onClick={(event) => this.handleImageClick(event, image)} className='image-action-button view'>Просмотр</button>
                                                 <button onClick={(event) => this.handleDeleteImage(event, image)} className='image-action-button delete'><Delete/></button>
                                             </div>
                                             : null
@@ -222,14 +242,16 @@ class Album extends React.Component {
 
 const mapStateToProps = state => ({
     editDescriptionShown: state.dialogs.editDescriptionShown,
-    currentUser: state.user.currentUser
+    currentUser: state.user.currentUser,
+    images: state.images.imageUrls
 })
 
 const mapDispatchToProps = dispatch => ({
     toggleFullscreenImage: () => dispatch(toggleFullscreenImage()),
     setFullScreenImage: imageUrl => dispatch(setFullScreenImage(imageUrl)),
     toggleAddImages:() => dispatch(toggleAddImages()),
-    toggleDescriptionEdit: () => dispatch(toggleDescriptionEdit())
+    toggleDescriptionEdit: () => dispatch(toggleDescriptionEdit()),
+    setImages: images => dispatch(setImages(images))
 })
 
 
