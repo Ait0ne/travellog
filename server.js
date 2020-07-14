@@ -27,11 +27,7 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage: storage});
 
-try{
-    fs.mkdirSync(path.join(__dirname, 'uploads/photos'))
-} catch {
-    
-}
+
 
 const app = express();
 
@@ -58,6 +54,11 @@ app.post('/images', upload.array('file'), async (req, res) => {
     const {placeId, userId, avatar} = req.body
     const images = req.files
     let files = null
+    try{
+        fs.mkdirSync(path.join(__dirname, 'uploads/photos'))
+    } catch {
+        
+    }
     await Promise.all(images.map(image => {
         return sharp(image.path)
         .resize(300,300)

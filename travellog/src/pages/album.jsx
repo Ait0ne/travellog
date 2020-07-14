@@ -103,6 +103,7 @@ class Album extends React.Component {
     }
 
     handleDeleteImage = (event, image) => {
+        event.preventDefault();
         const {placeId, userId} = this.props.match.params
         removeImage(userId, placeId, image.id)
         .then((result) => {
@@ -214,7 +215,7 @@ class Album extends React.Component {
                                     >   
                                         {
                                             deleteButtonShown?
-                                            <div className='image-actions-buttons' onClick={() =>this.handleImageClick(image)} >
+                                            <div className='image-actions-buttons'  >
                                                 <button onClick={(event) => this.handleDeleteImage(event, image)} className='image-action-button delete'><Delete/></button>
                                             </div>
                                             : null

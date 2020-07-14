@@ -20,7 +20,6 @@ const useStyles = makeStyles({
 
 const FullScreenImage = ({isFullscreenImageShown, setFullScreenImage, toggleFullscreenImage, fullScreenImage, imageUrls}) => {
     const classes = useStyles();
-    console.log(fullScreenImage)
     const [currentIndex, setCurrentIndex] = useState(imageUrls.findIndex(img=> img.imageUrl===fullScreenImage))
 
     const handleModalClose = () => {
