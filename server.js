@@ -27,6 +27,11 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage: storage});
 
+try{
+    fs.mkdirSync(path.join(__dirname, 'uploads/photos'))
+} catch {
+    
+}
 
 const app = express();
 
@@ -36,7 +41,7 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors({
-    origin: ['http://radiant-reef-63518.herokuapp.com/', 'http://localhost:3000/']
+    origin: ['http://radiant-reef-63518.herokuapp.com', 'http://localhost:3000']
 }));
 
 
@@ -58,7 +63,7 @@ app.post('/images', upload.array('file'), async (req, res) => {
         .resize(300,300)
         .toBuffer()
         .then( data => {
-            return fs.writeFile(path.join(__dirname,`${avatar?'avatars':'uploads'}/medium-${image.originalname}`), data, (err) => {
+            return fs.writeFile(path.join(__dirname,`${avatar?'avatars':'uploads/photos'}/medium-${image.originalname}`), data, (err) => {
                 if (err) {
                     console.log('1',err)
                 }
@@ -68,9 +73,31 @@ app.post('/images', upload.array('file'), async (req, res) => {
             console.log('2', err)
         })
     }))
+
+    if (!avatar) {
+        await Promise.all(images.map(image => {
+            return sharp(image.path)
+            .resize(2560,null, {
+                fit: sharp.fit.inside,
+                withoutEnlargement: true
+            })
+            .toBuffer()
+            .then( data => {
+                return fs.writeFile(path.join(__dirname,`${avatar?'avatars':'uploads/photos'}/${image.originalname}`), data, (err) => {
+                    if (err) {
+                        console.log('1',err)
+                    }
+                })
+            })
+            .catch(err => {
+                console.log('2', err)
+            })
+        }))
+    }
+
     files = await new uploader.default({
         bucket:'travellogserverbucket',
-        localPath: path.join(__dirname,`${avatar?'avatars':'uploads'}`),
+        localPath: path.join(__dirname,`${avatar?'avatars':'uploads/photos'}`),
         remotePath: `${userId}/${avatar? 'avatar':placeId}`,
         glob: '*.jpg',
         accessControlLevel:'public-read'
