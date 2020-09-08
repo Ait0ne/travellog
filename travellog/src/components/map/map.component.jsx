@@ -1,6 +1,6 @@
 import React, {Fragment, createRef} from 'react';
 import { Viewer, Scene, Camera, Entity, BillboardGraphics, CustomDataSource, CameraFlyTo, Globe} from 'resium';
-import { Math, Color, MapboxStyleImageryProvider,  Cartesian3, Cartesian2, EntityCluster, PinBuilder} from 'cesium';
+import {Math, Color, MapboxStyleImageryProvider, Cartesian3, Cartesian2, EntityCluster, PinBuilder} from 'cesium';
 import Popup from '../popup/popup.components';
 import { connect } from 'react-redux';
 import { Popover, Menu, MenuItem} from '@material-ui/core'

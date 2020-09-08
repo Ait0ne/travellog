@@ -11,13 +11,13 @@ import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import NavBar from './components/navBar/navBar.component';
 import FullScreenImage from './components/fullScreenImage/fullScreenImage.component';
 import Homepage from './pages/homepage';
-// import Album from './pages/album';
+import Album from './pages/album';
 import Auth from './pages/auth'
 import Landing from './pages/landing';
 import Profile from './pages/profile';
 
 // const Homepage = lazy(() => import('./pages/homepage'));
-const Album = lazy(()=>import('./pages/album'));
+// const Album = lazy(()=>import('./pages/album'));
 
 class App extends React.Component {
   state = {
@@ -61,7 +61,6 @@ class App extends React.Component {
           this.state.isLoading? 
           <Fallback />
           :
-          <Suspense fallback={<Fallback/>}>
           <AnimatePresence exitBeforeEnter>
             <Switch location={location} key={location.pathname}>
                 <Route exact path='/'  component={Landing}/>
@@ -73,7 +72,6 @@ class App extends React.Component {
                 <Route exact path='/:userId/:placeId' component={Album}/>
             </Switch>
           </AnimatePresence>
-          </Suspense>
         }
         {
           isFullscreenImageShown?<FullScreenImage />:null

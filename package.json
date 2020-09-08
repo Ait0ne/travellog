@@ -15,7 +15,7 @@
   "dependencies": {
     "aws-sdk": "^2.709.0",
     "body-parser": "^1.19.0",
-    "copy-webpack-plugin": "^6.0.3",
+    "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -28,6 +28,7 @@
     "strip-pragma-loader": "^1.0.0"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^6.0.3",
     "nodemon": "^2.0.4"
   }
 }
