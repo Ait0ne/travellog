@@ -14,7 +14,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@wojtekmaj/react-daterange-picker": "^3.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.5.0",
     "cesium": "^1.71.0",
     "craco-cesium": "^1.2.0",
